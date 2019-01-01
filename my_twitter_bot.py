@@ -10,10 +10,10 @@ import time
 # More info: https://help.pythonanywhere.com/pages/AlwaysOnTasks/
 print('this is my twitter bot', flush=True)
 
-CONSUMER_KEY = 'o4NSc2RLeZsjxu6G5Bz2XYs7T '
-CONSUMER_SECRET = 'vsGyYjBHIsAr8I5V6yN4lrja7YlIgUtNbooSFEl0BVmx3hHjnv '
+CONSUMER_KEY = 'o4NSc2RLeZsjxu6G5Bz2XYs7T'
+CONSUMER_SECRET = 'vsGyYjBHIsAr8I5V6yN4lrja7YlIgUtNbooSFEl0BVmx3hHjnv'
 ACCESS_KEY = '1077269677884215298-HtNubmmCEGqLxsms4Tm93fJWYoylvw'
-ACCESS_SECRET = '1bs3rYXF6BJjnNHfJebF72kemCCzClNwBBsQYm3xActRO '	
+ACCESS_SECRET = '1bs3rYXF6BJjnNHfJebF72kemCCzClNwBBsQYm3xActRO'	
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
@@ -34,24 +34,19 @@ def store_last_seen_id(last_seen_id, file_name):
     return
 
 def reply_to_tweets():
-    print('retrieving and replying to tweets...', flush=True)
-    # DEV NOTE: use 1060651988453654528 for testing.
+    print('retrievind and replying to tweets...')
     last_seen_id = retrieve_last_seen_id(FILE_NAME)
-    # NOTE: We need to use tweet_mode='extended' below to show
-    # all full tweets (with full_text). Without it, long tweets
-    # would be cut off.
-    mentions = api.mentions_timeline(
-                        last_seen_id,
-                        tweet_mode='extended')
+    mentions = api.mentions_timeline(last_seen_id, tweet_mode='extended')
+
     for mention in reversed(mentions):
-        print(str(mention.id) + ' - ' + mention.full_text, flush=True)
+        print(str(mention.id) + '-' + mention.full_text)
         last_seen_id = mention.id
         store_last_seen_id(last_seen_id, FILE_NAME)
         if '#helloworld' in mention.full_text.lower():
-            print('found #helloworld!', flush=True)
-            print('responding back...', flush=True)
-            api.update_status('@' + mention.user.screen_name +
-                    '#HelloWorld eai!', mention.id)
+            print('Found helloworld!')
+            print('responding back...')
+            api.update_status('@' + mention.user.screen_name + 
+                '#HelloWorld de volta pra você!', mention.id)
 
 while True:
     reply_to_tweets()
